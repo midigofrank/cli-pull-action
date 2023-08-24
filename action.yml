@@ -4,7 +4,12 @@ inputs:
   secret_input:
     description: "OpenFN API KEY"
     required: true
-  
+  project_id_input:
+    description: "OpenFN Project ID"
+    required: true
+  commit_message: 
+    description: "Pull Commit Message"
+    required: true
 runs:
   using: "composite"
   steps:
