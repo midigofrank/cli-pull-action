@@ -1,0 +1,29 @@
+name: 'Pulls a project spec and state'
+description: 'Pulls a project spec and state Lightning instance'
+inputs:
+  secret_input:
+    description: "OpenFN API KEY"
+    required: true
+  
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout Project export
+      uses: actions/checkout@v3
+    - name: Set up Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+    - run: |
+        npm install -g @openfn/cli
+        openfn pull -c config.json --no-confirm
+      shell: bash
+      env: 
+        OPENFN_API_KEY: ${{ inputs.secret_input }}
+        OPENFN_COMMIT_MESSAGE: ${{ github.event.client_payload.message }}
+    - name: Commit new state file
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with: 
+        commit_message: "New State and Spec"
+
+        
