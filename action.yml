@@ -1,5 +1,5 @@
-name: 'Pulls a project spec and state'
-description: 'Pulls a project spec and state Lightning instance'
+name: 'Pull and Commit'
+description: 'Pulls a project spec and state from a Lightning instance; commits to a branch'
 branding:
   icon: 'download'
   color: 'purple'
@@ -35,5 +35,3 @@ runs:
         OPENFN_COMMIT_MESSAGE: ${{ inputs.commit_message_input }}
       with: 
         commit_message: $OPENFN_COMMIT_MESSAGE
-
-        
