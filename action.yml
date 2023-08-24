@@ -20,7 +20,7 @@ runs:
       shell: bash
       env: 
         OPENFN_API_KEY: ${{ inputs.secret_input }}
-        OPENFN_PROJECT_ID: ${{ inputs.project_id }}
+        OPENFN_PROJECT_ID: ${{ inputs.project_id_input }}
     - name: Commit new state file
       uses: stefanzweifel/git-auto-commit-action@v4
       env:
