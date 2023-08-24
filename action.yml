@@ -1,6 +1,8 @@
 name: 'Pulls a project spec and state'
 description: 'Pulls a project spec and state Lightning instance'
-icon: download
+branding:
+  icon: 'download'
+  color: 'purple'
 inputs:
   secret_input:
     description: "OpenFN API KEY"
