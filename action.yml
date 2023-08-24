@@ -16,14 +16,16 @@ runs:
         node-version: 18.x
     - run: |
         npm install -g @openfn/cli
-        openfn pull -c config.json --no-confirm
+        openfn pull $OPENFN_PROJECT_ID -c config.json --no-confirm
       shell: bash
       env: 
         OPENFN_API_KEY: ${{ inputs.secret_input }}
-        OPENFN_COMMIT_MESSAGE: ${{ github.event.client_payload.message }}
+        OPENFN_PROJECT_ID: ${{ inputs.project_id }}
     - name: Commit new state file
       uses: stefanzweifel/git-auto-commit-action@v4
+      env:
+        OPENFN_COMMIT_MESSAGE: ${{ inputs.commit_message }}
       with: 
-        commit_message: "New State and Spec"
+        commit_message: $OPENFN_COMMIT_MESSAGE
 
         
