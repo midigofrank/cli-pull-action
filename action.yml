@@ -7,7 +7,7 @@ inputs:
   project_id_input:
     description: "OpenFN Project ID"
     required: true
-  commit_message: 
+  commit_message_input: 
     description: "Pull Commit Message"
     required: true
 runs:
@@ -29,7 +29,7 @@ runs:
     - name: Commit new state file
       uses: stefanzweifel/git-auto-commit-action@v4
       env:
-        OPENFN_COMMIT_MESSAGE: ${{ inputs.commit_message }}
+        OPENFN_COMMIT_MESSAGE: ${{ inputs.commit_message_input }}
       with: 
         commit_message: $OPENFN_COMMIT_MESSAGE
 
