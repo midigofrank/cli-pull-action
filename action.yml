@@ -7,8 +7,14 @@ inputs:
   secret_input:
     description: "OpenFN API KEY"
     required: true
+  config_path_input:
+    description: "OpenFN Path to Config"
+    required: true
   project_id_input:
     description: "OpenFN Project ID"
+    required: true
+  branch_input:
+    description: 'Branch to commit the project state and spec'
     required: true
   commit_message_input: 
     description: "Pull Commit Message"
@@ -17,19 +23,23 @@ runs:
   using: "composite"
   steps:
     - name: Checkout Project export
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.branch_input }}
     - name: Set up Node
       uses: actions/setup-node@v3
       with:
         node-version: 18.x
     - run: |
         npm install -g @openfn/cli
-        openfn pull $OPENFN_PROJECT_ID -c config.json --no-confirm
+        openfn pull $OPENFN_PROJECT_ID --config-path $OPENFN_CONFIG_PATH --no-confirm
       shell: bash
       env: 
         OPENFN_API_KEY: ${{ inputs.secret_input }}
         OPENFN_PROJECT_ID: ${{ inputs.project_id_input }}
+        OPENFN_CONFIG_PATH: ${{ inputs.config_path_input }}
     - name: Commit new state file
       uses: stefanzweifel/git-auto-commit-action@v4
       with: 
         commit_message: ${{ inputs.commit_message_input }}
+        branch: ${{ inputs.branch_input }}
