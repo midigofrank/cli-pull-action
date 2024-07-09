@@ -1,4 +1,4 @@
-name: 'openfn pull and commit'
+name: 'midigo openfn pull and commit'
 description: 'Pulls a project spec and state from a Lightning instance; commits to a branch'
 branding:
   icon: 'download'
