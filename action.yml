@@ -1,5 +1,5 @@
 name: 'openfn pull and commit'
-description: 'Pulls a project spec and state from a Lightning instance; commits to a branch'
+description: 'Pulls an OpenFn project from a Lightning instance into an openfn.yaml workspace; commits to a branch'
 branding:
   icon: 'download'
   color: 'purple'
@@ -7,21 +7,18 @@ inputs:
   secret_input:
     description: "OpenFN API KEY"
     required: true
-  config_path_input:
-    description: "OpenFN Path to Config"
-    required: true
   project_id_input:
     description: "OpenFN Project ID"
     required: true
-  branch_input:
-    description: 'Branch to commit the project state and spec'
+  endpoint_input:
+    description: "Lightning URL, e.g. https://app.openfn.org"
     required: true
-  commit_message_input: 
+  branch_input:
+    description: 'Branch to commit the project to'
+    required: true
+  commit_message_input:
     description: "Pull Commit Message"
     required: true
-  snapshots_input:
-    description: 'IDs of snapshots separated by spaces'
-    required: false
 runs:
   using: "composite"
   steps:
@@ -34,20 +31,18 @@ runs:
       with:
         node-version: 24.x
     - run: |
-        npm install -g @openfn/cli
-        
-        if [ -z "${{ inputs.snapshots_input }}" ]; then
-          openfn pull $OPENFN_PROJECT_ID --config-path $OPENFN_CONFIG_PATH --no-confirm
-        else
-          openfn pull $OPENFN_PROJECT_ID --config-path $OPENFN_CONFIG_PATH --snapshots ${{ inputs.snapshots_input }} --no-confirm
-        fi
+        npm install -g @openfn/cli@^1.44.0
+
+        # Lightning is the source of truth: --force overwrites local files,
+        # --track makes this branch track the project
+        openfn project pull "$OPENFN_PROJECT_ID" --endpoint "$OPENFN_PULL_ENDPOINT" --force --track
       shell: bash
-      env: 
+      env:
         OPENFN_API_KEY: ${{ inputs.secret_input }}
         OPENFN_PROJECT_ID: ${{ inputs.project_id_input }}
-        OPENFN_CONFIG_PATH: ${{ inputs.config_path_input }}
+        OPENFN_PULL_ENDPOINT: ${{ inputs.endpoint_input }}
     - name: Commit new state file
       uses: stefanzweifel/git-auto-commit-action@v7
-      with: 
+      with:
         commit_message: ${{ inputs.commit_message_input }}
         branch: ${{ inputs.branch_input }}
