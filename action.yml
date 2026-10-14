@@ -11,8 +11,9 @@ inputs:
     description: "OpenFN Project ID"
     required: true
   endpoint_input:
-    description: "Lightning URL, e.g. https://app.openfn.org"
-    required: true
+    description: "Lightning URL, e.g. https://app.openfn.org. Defaults to the endpoint the workspace tracks"
+    required: false
+    default: ''
   branch_input:
     description: 'Branch to commit the project to'
     required: true
@@ -35,7 +36,11 @@ runs:
 
         # Lightning is the source of truth: --force overwrites local files,
         # --track makes this branch track the project
-        openfn project pull "$OPENFN_PROJECT_ID" --endpoint "$OPENFN_PULL_ENDPOINT" --force --track
+        args=(--force --track)
+        if [ -n "$OPENFN_PULL_ENDPOINT" ]; then
+          args+=(--endpoint "$OPENFN_PULL_ENDPOINT")
+        fi
+        openfn project pull "$OPENFN_PROJECT_ID" "${args[@]}"
       shell: bash
       env:
         OPENFN_API_KEY: ${{ inputs.secret_input }}

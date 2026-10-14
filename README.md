@@ -6,6 +6,10 @@ source of truth: local changes to the project's files are overwritten.
 
 Lightning's GitHub sync installs and dispatches this action for you.
 
+`endpoint_input` is optional. Without it, the CLI uses the endpoint the
+workspace already tracks for the project, then `OPENFN_ENDPOINT`, then
+app.openfn.org. Pass it on the first pull into a new repo.
+
 > `v1` of this action uses the legacy `config.json` / `openfn pull` format.
 > Pin to `@v1` if your repo still uses it.
 
