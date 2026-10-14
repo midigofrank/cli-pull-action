@@ -14,6 +14,10 @@ inputs:
     description: "Lightning URL, e.g. https://app.openfn.org. Defaults to the endpoint the workspace tracks"
     required: false
     default: ''
+  workspace_input:
+    description: "Folder holding the project's openfn.yaml, relative to the repo root. Defaults to the root"
+    required: false
+    default: ''
   branch_input:
     description: 'Branch to commit the project to'
     required: true
@@ -34,6 +38,10 @@ runs:
     - run: |
         npm install -g @openfn/cli@^1.44.0
 
+        # The CLI finds the git branch from inside the workspace, so the folder
+        # has to exist before the first pull
+        mkdir -p "${OPENFN_WORKSPACE:-.}"
+
         # Lightning is the source of truth: --force overwrites local files,
         # --track makes this branch track the project
         args=(--force --track)
@@ -46,6 +54,7 @@ runs:
         OPENFN_API_KEY: ${{ inputs.secret_input }}
         OPENFN_PROJECT_ID: ${{ inputs.project_id_input }}
         OPENFN_PULL_ENDPOINT: ${{ inputs.endpoint_input }}
+        OPENFN_WORKSPACE: ${{ inputs.workspace_input }}
     - name: Commit new state file
       uses: stefanzweifel/git-auto-commit-action@v7
       with:
