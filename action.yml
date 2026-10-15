@@ -40,7 +40,7 @@ runs:
       with:
         node-version: 24.x
     - run: |
-        npm install -g @openfn/cli@^1.44.0
+        npm install -g @openfn/cli@latest
 
         # The CLI finds the git branch from inside the workspace, so the folder
         # has to exist before the first pull
