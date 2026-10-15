@@ -18,6 +18,10 @@ inputs:
     description: "Folder holding the project's openfn.yaml, relative to the repo root. Defaults to the root"
     required: false
     default: ''
+  alias_input:
+    description: "Local alias for the project, e.g. when another project in the workspace already uses 'main'. Only needed on the first pull: later pulls keep the alias"
+    required: false
+    default: ''
   branch_input:
     description: 'Branch to commit the project to'
     required: true
@@ -48,6 +52,9 @@ runs:
         if [ -n "$OPENFN_PULL_ENDPOINT" ]; then
           args+=(--endpoint "$OPENFN_PULL_ENDPOINT")
         fi
+        if [ -n "$OPENFN_ALIAS" ]; then
+          args+=(--alias "$OPENFN_ALIAS")
+        fi
         openfn project pull "$OPENFN_PROJECT_ID" "${args[@]}"
       shell: bash
       env:
@@ -55,6 +62,7 @@ runs:
         OPENFN_PROJECT_ID: ${{ inputs.project_id_input }}
         OPENFN_PULL_ENDPOINT: ${{ inputs.endpoint_input }}
         OPENFN_WORKSPACE: ${{ inputs.workspace_input }}
+        OPENFN_ALIAS: ${{ inputs.alias_input }}
     - name: Commit new state file
       uses: stefanzweifel/git-auto-commit-action@v7
       with:

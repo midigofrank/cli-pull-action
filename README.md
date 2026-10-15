@@ -22,5 +22,6 @@ app.openfn.org. Pass it on the first pull into a new repo.
     endpoint_input: https://app.openfn.org
     branch_input: main
     workspace_input: projects/my-project # optional, defaults to the repo root
+    alias_input: my-project # optional, defaults to the project's existing alias, else main
     commit_message_input: 'Sync from Lightning'
 ```
