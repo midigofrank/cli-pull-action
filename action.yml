@@ -39,16 +39,18 @@ runs:
       uses: actions/setup-node@v6
       with:
         node-version: 24.x
-    - run: |
-        npm install -g @openfn/cli@latest
-
+    - name: Install OpenFn CLI
+      run: npm install -g @openfn/cli@latest
+      shell: bash
+    - name: Pull project from OpenFn
+      run: |
         # The CLI finds the git branch from inside the workspace, so the folder
         # has to exist before the first pull
         mkdir -p "${OPENFN_WORKSPACE:-.}"
 
         # Lightning is the source of truth: --force overwrites local files,
         # --track makes this branch track the project
-        args=(--force --track)
+        args=(--force --track --log info)
         if [ -n "$OPENFN_PULL_ENDPOINT" ]; then
           args+=(--endpoint "$OPENFN_PULL_ENDPOINT")
         fi
